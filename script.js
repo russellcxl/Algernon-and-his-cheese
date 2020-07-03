@@ -1,6 +1,6 @@
 
-let rows = 5;
-let cols = 5;
+let rows = 25;
+let cols = 25;
 let grid = [];
 
 let uiBoard = document.querySelector(".board");
@@ -12,11 +12,15 @@ let btnFind = document.querySelector(".button__find");
 //openset will contain unevaluated neighbouring nodes, closedset will contain evaluated nodes
 let openSet = [];
 let closedSet = [];
+
+//this is for mapping out the final (shortest) path when all nodes have been evaluated
 let path = [];
 
 let startNode;
 let endNode;
 
+
+// ------------------------------------ SETTING UP UI ------------------------------------ //
 
 
 for (let i = 0; i < rows; i++) {
@@ -28,14 +32,13 @@ for (let i = 0; i < rows; i++) {
 }
 
 
-
 for (let i = 0; i < rows; i++) {
     newRow = document.createElement("tr");
     for (let j = 0; j < cols; j++) {
         let newBox = document.createElement("td");
         newBox.style.width = "1rem";
         newBox.style.height = "1rem";
-        newBox.style.border = "5px solid black"
+        newBox.style.border = "2px solid black"
         newRow.appendChild(newBox);
     }
     uiBoard.appendChild(newRow);
@@ -43,6 +46,15 @@ for (let i = 0; i < rows; i++) {
 
 
 let boxes = document.querySelectorAll("td");
+
+
+//temp function to see nodes
+for (let i = 0; i < boxes.length; i++) {
+    boxes[i].addEventListener("click", function() {
+        console.log(grid[Math.floor(i / rows)][i % cols]);
+        boxes[i].style.background = "grey";
+    });
+}
 
 
 // ------------------------------------ SETTING UP THE NODES ------------------------------------ //
@@ -96,6 +108,7 @@ class Node {
 
 }
 
+
 //create nodes and neighbours
 for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
@@ -109,9 +122,13 @@ for (let i = 0; i < rows; i++) {
     }
 }
 
+
 //have to be initialised only after the nodes have been created
 startNode = grid[0][0]; 
-endNode = grid[rows - 1][cols - 1];
+endNode = grid[24][24];
+
+startNode.colorBox("green");
+endNode.colorBox("blue");
 
 
 //set h values
@@ -119,16 +136,6 @@ for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
         grid[i][j].getH(endNode);
     }
-}
-
-
-//color boxes in closed and open sets -- these should be inside search function
-for (let i = 0; i < openSet.length; i++) {
-    openSet[i].colorBox("green");
-}
-
-for (let i = 0; i < closedSet.length; i++) {
-    closedSet[i].colorBox("red");
 }
 
 
@@ -144,14 +151,15 @@ for (let i = 0; i < closedSet.length; i++) {
 //...
 
 
+//start by pushing the startnode into the openset
+openSet.push(startNode)
+let currentNode;
 
+
+//this is the main A* search algorithm
 function findCheese() {
 
-    //start by pushing the startnode into the openset
-    openSet.push(startNode)
-    let currentNode;
-
-    while (openSet.length > 0) {
+    if (openSet.length > 0) {
 
         //find the node in openset with the lowest f cost
         let indexBest = 0;
@@ -161,60 +169,73 @@ function findCheese() {
             }
         }
 
-        //set current node as node with lowest f cost, move it to closedset, empty openset
+        //set current node as node with lowest f cost, color it green, move it to closedset, empty openset
         currentNode = openSet[indexBest];
+        currentNode.colorBox("maroon");
         closedSet.push(openSet.splice(indexBest,1)[0]);
-        openSet = [];
 
-        //push current node neighbours into the openset, fill g cost for neighbours
+        //push current node neighbours into the openset, fill g and f cost for neighbours
         for (let i = 0; i < currentNode.neighbours.length; i++) {
 
+            let current = currentNode.neighbours[i];
+
             //only push neighbours that are not in the closedset
-            if (!closedSet.includes(currentNode.neighbours[i])) {
-                openSet.push(currentNode.neighbours[i]);
+            if (!closedSet.includes(current) && !openSet.includes(current)) {
+                openSet.push(current);
+                current.colorBox("green");
 
                 //before passing on g cost, check if g costs of (closed) neighbours of current neighbours are lower; take the lower
-                for (let j = 0; j < currentNode.neighbours[i].neighbours.length; j++) {
+                for (let j = 0; j < current.neighbours.length; j++) {
 
-                    let neighbour2 = currentNode.neighbours[i].neighbours[j];
+                    let neighbour2 = current.neighbours[j];
 
                     if (closedSet.includes(neighbour2) && neighbour2.g < currentNode.g) {
-                        currentNode.neighbours[i].g = neighbour2.g;
-                        currentNode.neighbours[i].previous = neighbour2;
+                        current.g = neighbour2.g;
+                        current.previous = neighbour2;
                     }
 
                     else {
-                        currentNode.neighbours[i].g = currentNode.g + 1;
-                        currentNode.neighbours[i].previous = currentNode;
+                        current.g = currentNode.g + 1;
+                        current.previous = currentNode;
                     }
                 }
-            }
-        }
 
-        //break
-        if (currentNode === endNode || openSet.length == 0) {
-            break;
+                current.getF();
+
+            }
         }
     }
 }
 
 
-//color endnode and all previous nodes
-let nodeToColor = endNode;
-
-function mapPath() {
-    nodeToColor.colorBox("blue");
-    if (nodeToColor.previous) {
-        nodeToColor = nodeToColor.previous;
-        mapPath();
-    }
-    else {
-        return false;
-    }
+//for visualising the pathfinding process
+function start() {
+    return new Promise((resolve) => {
+        let mappingPath = setInterval(function() {
+            if (currentNode === endNode || openSet.length == 0) {
+                clearInterval(mappingPath);
+                resolve();
+            }
+            else {
+                findCheese();
+            }
+        }, 20);
+    })
+    .then(() => {
+        let nodeToColor = endNode;
+        let mappingColours = setInterval(function() {
+            nodeToColor.colorBox("blue");
+            if (nodeToColor.previous) {
+                nodeToColor = nodeToColor.previous;
+            }
+            else {
+                clearInterval(mappingColours);
+            }
+        }, 20);
+    });
 }
 
 
 $(".button__find").click(function() {
-    findCheese();
-    mapPath();
+    start();
 })
