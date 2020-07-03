@@ -1,0 +1,21 @@
+.container {
+    margin-top: 5rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+table {
+    height: 25rem;
+    width: 25rem;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5rem;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+}
