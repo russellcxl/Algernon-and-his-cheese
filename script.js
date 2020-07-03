@@ -18,6 +18,7 @@ let path = [];
 
 let startNode;
 let endNode;
+let currentNode;
 
 
 // ------------------------------------ SETTING UP UI ------------------------------------ //
@@ -49,12 +50,12 @@ let boxes = document.querySelectorAll("td");
 
 
 //temp function to see nodes
-for (let i = 0; i < boxes.length; i++) {
-    boxes[i].addEventListener("click", function() {
-        console.log(grid[Math.floor(i / rows)][i % cols]);
-        boxes[i].style.background = "grey";
-    });
-}
+// for (let i = 0; i < boxes.length; i++) {
+//     boxes[i].addEventListener("click", function() {
+//         console.log(grid[Math.floor(i / rows)][i % cols]);
+//         boxes[i].style.background = "grey";
+//     });
+// }
 
 
 // ------------------------------------ SETTING UP THE NODES ------------------------------------ //
@@ -131,12 +132,44 @@ startNode.colorBox("green");
 endNode.colorBox("blue");
 
 
-//set h values
-for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-        grid[i][j].getH(endNode);
-    }
+// ------------------------------------ SETTING UP SET BUTTONS ------------------------------------ //
+
+
+//this is so you can click once on the set-start/set-end buttons to 'toggle' them
+//seems a bit chunky though
+let inputType;
+
+for (let i = 0; i < boxes.length; i++) {
+    boxes[i].addEventListener("click", function() {
+        
+        if (inputType === 'start') {
+            startNode.colorBox("");
+            startNode = grid[Math.floor(i / rows)][i % cols];
+            startNode.colorBox("green");
+            openSet.splice(0, 1, startNode);
+            inputType = "";
+        }
+        else if (inputType === 'end') {
+            endNode.colorBox("");
+            endNode = grid[Math.floor(i / rows)][i % cols];
+            endNode.colorBox("blue");
+            inputType = "";
+        }
+        else {
+            boxes[i].style.background = "grey";
+        }
+    });
 }
+
+
+btnStart.addEventListener("click", function() {
+    inputType = "start";
+});
+
+
+btnEnd.addEventListener("click", function() {
+    inputType = "end";
+});
 
 
 // ------------------------------------ SEARCH FUNCTION ------------------------------------ //
@@ -151,15 +184,14 @@ for (let i = 0; i < rows; i++) {
 //...
 
 
-//start by pushing the startnode into the openset
-openSet.push(startNode)
-let currentNode;
+//push default startNode into openset; can do without but user must always set board first
+openSet.push(startNode);
 
 
 //this is the main A* search algorithm
 function findCheese() {
 
-    if (openSet.length > 0) {
+        if (openSet.length > 0) {
 
         //find the node in openset with the lowest f cost
         let indexBest = 0;
@@ -174,7 +206,7 @@ function findCheese() {
         currentNode.colorBox("maroon");
         closedSet.push(openSet.splice(indexBest,1)[0]);
 
-        //push current node neighbours into the openset, fill g and f cost for neighbours
+        //push current node neighbours into the openset, fill g, h, f costs for neighbours
         for (let i = 0; i < currentNode.neighbours.length; i++) {
 
             let current = currentNode.neighbours[i];
@@ -200,6 +232,7 @@ function findCheese() {
                     }
                 }
 
+                current.getH(endNode);
                 current.getF();
 
             }
