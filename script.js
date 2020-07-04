@@ -6,7 +6,8 @@ let grid = [];
 let uiBoard = document.querySelector(".board");
 let btnStart = document.querySelector(".button__start");
 let btnEnd = document.querySelector(".button__end");
-let btnWall = document.querySelector(".button__wall");
+let btnReset = document.querySelector(".button__reset");
+// let btnWall = document.querySelector(".button__wall");
 let btnFind = document.querySelector(".button__find");
 
 //openset will contain unevaluated neighbouring nodes, closedset will contain evaluated nodes
@@ -19,6 +20,7 @@ let path = [];
 let startNode;
 let endNode;
 let currentNode;
+let walls = [];
 
 
 // ------------------------------------ SETTING UP UI ------------------------------------ //
@@ -111,25 +113,28 @@ class Node {
 
 
 //create nodes and neighbours
-for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-        grid[i][j] = new Node(i, j);
+function setNodes() {
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            grid[i][j] = new Node(i, j);
+        }
     }
-}
 
-for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-        grid[i][j].getNeighbours();
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            grid[i][j].getNeighbours();
+        }
     }
+
+    startNode = grid[0][0];
+    endNode = grid[rows - 1][cols - 1];
+
+    startNode.colorBox("green");
+    endNode.colorBox("blue");
+
+    openSet.push(startNode);
 }
-
-
-//have to be initialised only after the nodes have been created
-startNode = grid[0][0]; 
-endNode = grid[24][24];
-
-startNode.colorBox("green");
-endNode.colorBox("blue");
+setNodes();
 
 
 // ------------------------------------ SETTING UP SET BUTTONS ------------------------------------ //
@@ -172,6 +177,14 @@ btnEnd.addEventListener("click", function() {
 });
 
 
+btnReset.addEventListener("click", function() {
+    boxes.forEach(x => x.style.background = "");
+    closedSet = [];
+    openSet = [];
+    setNodes();
+});
+
+
 // ------------------------------------ SEARCH FUNCTION ------------------------------------ //
 
 
@@ -182,10 +195,6 @@ btnEnd.addEventListener("click", function() {
 //push neighbour with best f into closed set; remove from openset
 //current = neighbour with best f
 //...
-
-
-//push default startNode into openset; can do without but user must always set board first
-openSet.push(startNode);
 
 
 //this is the main A* search algorithm
@@ -242,6 +251,7 @@ function findCheese() {
 
 
 //for visualising the pathfinding process
+//should disable all buttons while this is running
 function start() {
     return new Promise((resolve) => {
         let mappingPath = setInterval(function() {
@@ -252,7 +262,7 @@ function start() {
             else {
                 findCheese();
             }
-        }, 20);
+        }, 10);
     })
     .then(() => {
         let nodeToColor = endNode;
@@ -271,4 +281,4 @@ function start() {
 
 $(".button__find").click(function() {
     start();
-})
+});
