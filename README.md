@@ -16,3 +16,6 @@ Dr Nemur says I shuld try working on helping Algernon now.
 ### progress report 2.1 -- july 3 2020 (evening)
 I think I have taught Algernon to find the shortest path. But I have not yet set obstacles; so I cannot be sure. I will try again tomorrow, because now I am tired and Miss Kinnian says I should rest.
 
+### progress report 3 -- july 4 2020
+Algernon has made tremendous progress. I can now say with certainty that Algernon will always take the shortest path to the cheese block. I have also programmed definable walls to make it more challenging for him, and also to prove that he is just as capable of making intelligent decisions as his corporeal self.
+

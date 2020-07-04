@@ -7,7 +7,6 @@ let uiBoard = document.querySelector(".board");
 let btnStart = document.querySelector(".button__start");
 let btnEnd = document.querySelector(".button__end");
 let btnReset = document.querySelector(".button__reset");
-// let btnWall = document.querySelector(".button__wall");
 let btnFind = document.querySelector(".button__find");
 
 //openset will contain unevaluated neighbouring nodes, closedset will contain evaluated nodes
@@ -145,6 +144,8 @@ setNodes();
 let inputType;
 
 for (let i = 0; i < boxes.length; i++) {
+
+    //for setting start and end nodes
     boxes[i].addEventListener("click", function() {
         
         if (inputType === 'start') {
@@ -160,8 +161,13 @@ for (let i = 0; i < boxes.length; i++) {
             endNode.colorBox("blue");
             inputType = "";
         }
-        else {
-            boxes[i].style.background = "grey";
+    });
+
+    //for creating walls
+    boxes[i].addEventListener("mousemove", function(e) {
+        if (e.buttons == 1) {
+            boxes[i].style.background = "#262b2e";
+            walls.push(grid[Math.floor(i / rows)][i % cols]);
         }
     });
 }
@@ -212,37 +218,37 @@ function findCheese() {
 
         //set current node as node with lowest f cost, color it green, move it to closedset, empty openset
         currentNode = openSet[indexBest];
-        currentNode.colorBox("maroon");
+        currentNode.colorBox("#751412");
         closedSet.push(openSet.splice(indexBest,1)[0]);
 
         //push current node neighbours into the openset, fill g, h, f costs for neighbours
         for (let i = 0; i < currentNode.neighbours.length; i++) {
 
-            let current = currentNode.neighbours[i];
+            let neighbour = currentNode.neighbours[i];
 
             //only push neighbours that are not in the closedset
-            if (!closedSet.includes(current) && !openSet.includes(current)) {
-                openSet.push(current);
-                current.colorBox("green");
+            if (!closedSet.includes(neighbour) && !openSet.includes(neighbour) && !walls.includes(neighbour)) {
+                openSet.push(neighbour);
+                neighbour.colorBox("green");
 
                 //before passing on g cost, check if g costs of (closed) neighbours of current neighbours are lower; take the lower
-                for (let j = 0; j < current.neighbours.length; j++) {
+                for (let j = 0; j < neighbour.neighbours.length; j++) {
 
-                    let neighbour2 = current.neighbours[j];
+                    let neighbour2 = neighbour.neighbours[j];
 
                     if (closedSet.includes(neighbour2) && neighbour2.g < currentNode.g) {
-                        current.g = neighbour2.g;
-                        current.previous = neighbour2;
+                        neighbour.g = neighbour2.g;
+                        neighbour.previous = neighbour2;
                     }
 
                     else {
-                        current.g = currentNode.g + 1;
-                        current.previous = currentNode;
+                        neighbour.g = currentNode.g + 1;
+                        neighbour.previous = currentNode;
                     }
                 }
 
-                current.getH(endNode);
-                current.getF();
+                neighbour.getH(endNode);
+                neighbour.getF();
 
             }
         }
