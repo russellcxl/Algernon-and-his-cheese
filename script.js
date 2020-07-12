@@ -8,6 +8,7 @@ let btnStart = document.querySelector(".button__start");
 let btnEnd = document.querySelector(".button__end");
 let btnReset = document.querySelector(".button__reset");
 let btnFind = document.querySelector(".button__find");
+let btnAll = document.querySelectorAll("button");
 
 //openset will contain unevaluated neighbouring nodes, closedset will contain evaluated nodes
 let openSet = [];
@@ -50,13 +51,10 @@ for (let i = 0; i < rows; i++) {
 let boxes = document.querySelectorAll("td");
 
 
-//temp function to see nodes
-// for (let i = 0; i < boxes.length; i++) {
-//     boxes[i].addEventListener("click", function() {
-//         console.log(grid[Math.floor(i / rows)][i % cols]);
-//         boxes[i].style.background = "grey";
-//     });
-// }
+for (let i = 0; i < boxes.length; i++) {
+    boxes[i].setAttribute("ondrop", "drop(event)");
+    boxes[i].setAttribute("ondragover", "allowDrop(event)");
+}
 
 
 // ------------------------------------ SETTING UP THE NODES ------------------------------------ //
@@ -131,6 +129,8 @@ function setNodes() {
     startNode.colorBox("green");
     endNode.colorBox("blue");
 
+    //boxes[0].innerHTML = `<img src="images/mouse.jpg" draggable="true" ondragstart="drag(event)" style="max-width:100%; max-height: 100%;"></img>`;
+
     openSet.push(startNode);
 }
 setNodes();
@@ -189,6 +189,24 @@ btnReset.addEventListener("click", function() {
     openSet = [];
     setNodes();
 });
+
+
+// ------------------------------------ DRAG AND DROP ------------------------------------ //
+
+
+function allowDrop(e) {
+    e.preventDefault();
+}
+
+function drag(e) {
+    e.dataTransfer.setData("text", e.target.id);
+}
+
+function drop(e) {
+    e.preventDefault();
+    let data = e.dataTransfer.getData("text");
+    e.target.innerHTML = document.getElementById(data).innerHTML;
+}
 
 
 // ------------------------------------ SEARCH FUNCTION ------------------------------------ //
@@ -257,8 +275,8 @@ function findCheese() {
 
 
 //for visualising the pathfinding process
-//should disable all buttons while this is running
 function start() {
+    btnAll.forEach(x => x.disabled = true);
     return new Promise((resolve) => {
         let mappingPath = setInterval(function() {
             if (currentNode === endNode || openSet.length == 0) {
@@ -279,6 +297,7 @@ function start() {
             }
             else {
                 clearInterval(mappingColours);
+                btnAll.forEach(x => x.disabled = false);
             }
         }, 20);
     });
