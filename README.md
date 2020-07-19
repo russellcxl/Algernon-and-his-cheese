@@ -1,7 +1,9 @@
 # Algernon-and-his-cheese
-Algernon will get to his cheese using the shortest possible route.
+Algernon will get to his cheese using the shortest possible route. 
 
-![Charlie and Algernon](images/a-star-search-ss.PNG)
+(Due to lack of time, Algernon remains for now a green-colored square. I hope eventually to turn that green color square into an animated mouse that can be picked up and dropped)
+
+![a-star-search](images/a-star-search-ss.PNG)
 
 ### progris ripot 1 -- july 2 2020
 Mr Strauss says I shud rite down what I think and evrey thing that I do. They have taken Algernon into the computer and told me to help him get to his cheese. I dunt know how to do that, but Miss Kinnian says I shuldnt worry. 
