@@ -1,7 +1,7 @@
 # Algernon-and-his-cheese
 Algernon will get to his cheese using the shortest possible route. 
 
-(Due to lack of time, Algernon remains for now a green-colored square. I hope eventually to turn that green color square into an animated mouse that can be picked up and dropped)
+(Due to a lack of time, Algernon remains for now a green-colored square. I hope eventually to turn that green-colored square into an animated mouse that can be picked up and dropped)
 
 ![a-star-search](images/a-star-search-ss.PNG)
 

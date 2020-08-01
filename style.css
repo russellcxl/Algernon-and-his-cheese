@@ -1,7 +1,12 @@
+.header {
+    font-family: 'ZCOOL XiaoWei', serif;
+}
+
 .instructions {
     text-align: center;
-    color: white;
-    margin-top: 30px;
+    color: black;
+    font-family: 'ZCOOL XiaoWei', serif;
+    width: 50vw;
 }
 
 .container {
@@ -23,6 +28,7 @@ table {
 .buttons {
     display: flex;
     flex-direction: column;
+    font-family: 'ZCOOL XiaoWei', serif;
 }
 
 button {

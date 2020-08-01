@@ -41,7 +41,7 @@ for (let i = 0; i < rows; i++) {
         let newBox = document.createElement("td");
         newBox.style.width = "1rem";
         newBox.style.height = "1rem";
-        newBox.style.border = "2px solid black"
+        newBox.style.border = "2px solid lightgray"
         newRow.appendChild(newBox);
     }
     uiBoard.appendChild(newRow);
@@ -126,8 +126,8 @@ function setNodes() {
     startNode = grid[0][0];
     endNode = grid[rows - 1][cols - 1];
 
-    startNode.colorBox("green");
-    endNode.colorBox("blue");
+    startNode.colorBox("#90ccf4");
+    endNode.colorBox("#f3d250");
 
     //boxes[0].innerHTML = `<img src="images/mouse.jpg" draggable="true" ondragstart="drag(event)" style="max-width:100%; max-height: 100%;"></img>`;
 
@@ -151,14 +151,14 @@ for (let i = 0; i < boxes.length; i++) {
         if (inputType === 'start') {
             startNode.colorBox("");
             startNode = grid[Math.floor(i / rows)][i % cols];
-            startNode.colorBox("green");
+            startNode.colorBox("#90ccf4");
             openSet.splice(0, 1, startNode);
             inputType = "";
         }
         else if (inputType === 'end') {
             endNode.colorBox("");
             endNode = grid[Math.floor(i / rows)][i % cols];
-            endNode.colorBox("blue");
+            endNode.colorBox("#f3d250");
             inputType = "";
         }
     });
@@ -166,7 +166,7 @@ for (let i = 0; i < boxes.length; i++) {
     //for creating walls
     boxes[i].addEventListener("mousemove", function(e) {
         if (e.buttons == 1) {
-            boxes[i].style.background = "#262b2e";
+            boxes[i].style.background = "#8590AA";
             walls.push(grid[Math.floor(i / rows)][i % cols]);
         }
     });
@@ -236,7 +236,7 @@ function findCheese() {
 
         //set current node as node with lowest f cost, color it green, move it to closedset, empty openset
         currentNode = openSet[indexBest];
-        currentNode.colorBox("#751412");
+        currentNode.colorBox("#90ccf4");
         closedSet.push(openSet.splice(indexBest,1)[0]);
 
         //push current node neighbours into the openset, fill g, h, f costs for neighbours
@@ -247,7 +247,7 @@ function findCheese() {
             //only push neighbours that are not in the closedset
             if (!closedSet.includes(neighbour) && !openSet.includes(neighbour) && !walls.includes(neighbour)) {
                 openSet.push(neighbour);
-                neighbour.colorBox("green");
+                neighbour.colorBox("#5da2d5");
 
                 //before passing on g cost, check if g costs of (closed) neighbours of current neighbours are lower; take the lower
                 for (let j = 0; j < neighbour.neighbours.length; j++) {
@@ -291,7 +291,7 @@ function start() {
     .then(() => {
         let nodeToColor = endNode;
         let mappingColours = setInterval(function() {
-            nodeToColor.colorBox("blue");
+            nodeToColor.colorBox("#f3d250");
             if (nodeToColor.previous) {
                 nodeToColor = nodeToColor.previous;
             }
