@@ -23,23 +23,28 @@
 
         <div class="instructions mx-auto mb-4">
             <p>INSTRUCTIONS: Hold down and drag to create <span style="background:#8590AA;">walls</span></p>
-            <p>Starts on the <span style="background:#90ccf4;">light blue square</span> with destination on the <span style="background: #f3d250;">yellow square</span>. <span style="background:#5da2d5">Dark blue squares</span> are possible nodes -- which if taken/evaluated, are turned into <span style="background:#90ccf4;">light blue ones</span>.</p>
         </div>
 
         <div class="container">
 
-            <div class="row">
-                <div class="column buttons">
+            <div class="row d-flex justify-content-center">
+                <div class="col-sm-3 buttons">
                     <button class="btn btn-dark button__start">SET START</button>
                     <button class="btn btn-dark button__end">SET END</button>
                     <!-- <button class="btn btn-primary button__wall">WALL</button> -->
                     <button class="btn btn-dark button__find">GO!</button>
                     <button class="btn btn-dark button__reset">RESET</button>
                 </div>
-                <div class="column">
-                    <table class="board"></table>
+                <div class="col-sm-6">
+                    <table class="board mx-auto"></table>
                 </div>
-                <div class="column"></div>
+                <div class="col-sm-3">
+                    <ul>
+                        <li><span style="background:#5da2d5">Dark blue</span> - start point / evaluated nodes</li>
+                        <li><span style="background:#90ccf4;">Light blue</span> - open nodes / unevaluated nodes</li>
+                        <li><span style="background: #f3d250;">Yellow</span> - destination / end node</li>
+                    </ul>
+                </div>
             </div>
             
         </div>
