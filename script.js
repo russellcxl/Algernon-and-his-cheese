@@ -51,10 +51,10 @@ for (let i = 0; i < rows; i++) {
 let boxes = document.querySelectorAll("td");
 
 
-for (let i = 0; i < boxes.length; i++) {
-    boxes[i].setAttribute("ondrop", "drop(event)");
-    boxes[i].setAttribute("ondragover", "allowDrop(event)");
-}
+// for (let i = 0; i < boxes.length; i++) {
+//     boxes[i].setAttribute("ondrop", "drop(event)");
+//     boxes[i].setAttribute("ondragover", "allowDrop(event)");
+// }
 
 
 // ------------------------------------ SETTING UP THE NODES ------------------------------------ //
@@ -185,6 +185,7 @@ btnEnd.addEventListener("click", function() {
 
 btnReset.addEventListener("click", function() {
     boxes.forEach(x => x.style.background = "");
+    walls = [];
     closedSet = [];
     openSet = [];
     setNodes();
@@ -194,19 +195,19 @@ btnReset.addEventListener("click", function() {
 // ------------------------------------ DRAG AND DROP ------------------------------------ //
 
 
-function allowDrop(e) {
-    e.preventDefault();
-}
+// function allowDrop(e) {
+//     e.preventDefault();
+// }
 
-function drag(e) {
-    e.dataTransfer.setData("text", e.target.id);
-}
+// function drag(e) {
+//     e.dataTransfer.setData("text", e.target.id);
+// }
 
-function drop(e) {
-    e.preventDefault();
-    let data = e.dataTransfer.getData("text");
-    e.target.innerHTML = document.getElementById(data).innerHTML;
-}
+// function drop(e) {
+//     e.preventDefault();
+//     let data = e.dataTransfer.getData("text");
+//     e.target.innerHTML = document.getElementById(data).innerHTML;
+// }
 
 
 // ------------------------------------ SEARCH FUNCTION ------------------------------------ //
