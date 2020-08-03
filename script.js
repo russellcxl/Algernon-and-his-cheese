@@ -170,7 +170,7 @@ for (let i = 0; i < boxes.length; i++) {
     boxes[i].addEventListener("mousemove", function(e) {
         e.preventDefault(); 
         if (e.buttons == 1) {
-            boxes[i].style.background = "#8590AA";
+            boxes[i].style.background = "gray";
             walls.push(grid[Math.floor(i / rows)][i % cols]);
         }
     });
