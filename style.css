@@ -1,11 +1,15 @@
-.header {
+body {
     font-family: 'ZCOOL XiaoWei', serif;
+}
+
+
+h1 {
+    font-size: 3.5rem;
 }
 
 .instructions {
     text-align: center;
     color: black;
-    font-family: 'ZCOOL XiaoWei', serif;
     width: 40vw;
 }
 
@@ -49,4 +53,12 @@ button {
 
 a:hover {
     color: #f3d250;
+}
+
+.fa-info-circle, .fa-route {
+    color: #343a40;
+}
+
+.fa-info-circle:hover, .fa-route:hover {
+    color: #5da2d5;
 }

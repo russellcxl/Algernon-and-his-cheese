@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -19,12 +19,13 @@
     </head>
 
     <body style="background: transparent;">
-        <div class="header d-flex justify-content-center mt-3 mb-2" style="flex-direction: column; align-items: center;">
-            <h1 style="margin-bottom: -5px;">PATHFINDER</h1>
+        <div class="header d-flex justify-content-center mt-1 mb-1" style="flex-direction: column; align-items: center;">
+            <h1 >PATHFINDER</h1>
         </div>
 
         <div class="instructions mx-auto">
-            <p>Instructions: Hold down and drag to create <span style="background:#8590AA;">walls</span></p>
+            <p><i class="fas fa-info-circle"> Instructions</i> &nbsp;&nbsp;<i class="fas fa-route"> Explanations</i></p>
+            <!-- Hold down and drag to create <span style="background:#8590AA;">walls</span> -->
         </div>
 
 
@@ -44,7 +45,7 @@
         </div>
 
         
-        <div class="container-buttons d-flex justify-content-center mt-3">
+        <div class="container-buttons d-flex justify-content-center mt-3" style="padding-bottom: 100px;">
             <button class="btn btn-dark button__start">SET START</button>
             <button class="btn btn-dark button__end">SET END</button>
             <button class="btn btn-dark button__find">GO</button>
@@ -53,7 +54,7 @@
 
         <!-- Footer -->
         <footer class="fixed-bottom text-right" style="background: #343a40;">
-            <p class="h6 pr-4 py-3 my-auto text-warning">
+            <p class="h6 pr-4 py-2 my-auto">
                 <a class="badge" href="https://github.com/russellcxl/sorting-visualiser" target="_blank">repo <i class="fab fa-github"></i></a>&nbsp;&nbsp;
                 <a class="badge" href="https://github.com/russellcxl/" target="_blank">russellcxl <i
                         class="fas fa-user-astronaut"></i></a>
