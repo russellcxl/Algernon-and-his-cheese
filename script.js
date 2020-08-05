@@ -1,6 +1,6 @@
 
 let rows = 25;
-let cols = 25;
+let cols = 50;
 let grid = [];
 
 let uiBoard = document.querySelector(".board");
@@ -23,6 +23,7 @@ let path = [];
 let startNode;
 let endNode;
 let currentNode;
+let finalNodes = [];
 let walls = [];
 
 
@@ -42,9 +43,6 @@ for (let i = 0; i < rows; i++) {
     newRow = document.createElement("tr");
     for (let j = 0; j < cols; j++) {
         let newBox = document.createElement("td");
-        newBox.style.width = "1rem";
-        newBox.style.height = "1rem";
-        newBox.style.border = "2px solid lightgray"
         newRow.appendChild(newBox);
     }
     uiBoard.appendChild(newRow);
@@ -146,6 +144,8 @@ setNodes();
 //seems a bit chunky though
 let inputType;
 
+
+
 for (let i = 0; i < boxes.length; i++) {
 
     //for setting start and end nodes
@@ -153,14 +153,14 @@ for (let i = 0; i < boxes.length; i++) {
         
         if (inputType === 'start') {
             startNode.colorBox("");
-            startNode = grid[Math.floor(i / rows)][i % cols];
+            startNode = grid[Math.floor(i / cols)][i % cols];
             startNode.colorBox(darkBlue);
             openSet.splice(0, 1, startNode);
             inputType = "";
         }
         else if (inputType === 'end') {
             endNode.colorBox("");
-            endNode = grid[Math.floor(i / rows)][i % cols];
+            endNode = grid[Math.floor(i / cols)][i % cols];
             endNode.colorBox(yellow);
             inputType = "";
         }
@@ -171,7 +171,7 @@ for (let i = 0; i < boxes.length; i++) {
         e.preventDefault(); 
         if (e.buttons == 1) {
             boxes[i].style.background = "#484848";
-            walls.push(grid[Math.floor(i / rows)][i % cols]);
+            walls.push(grid[Math.floor(i / cols)][i % cols]);
         }
     });
 }
@@ -278,10 +278,22 @@ function findCheese() {
     }
 }
 
+function disableUI(state) {
+    btnAll.forEach(x => x.disabled = state);
+}
+
+
+function collectFinalNodes(node = endNode) {
+    finalNodes.push(node);
+    if (node.previous) {
+        collectFinalNodes(node.previous)
+    }
+    else return;
+}
 
 //for visualising the pathfinding process
 function start() {
-    btnAll.forEach(x => x.disabled = true);
+    disableUI(true);
     return new Promise((resolve) => {
         let mappingPath = setInterval(function() {
             if (currentNode === endNode || openSet.length == 0) {
@@ -294,15 +306,17 @@ function start() {
         }, 10);
     })
     .then(() => {
-        let nodeToColor = endNode;
+        collectFinalNodes();
+        
+        let i = finalNodes.length - 1;
         let mappingColours = setInterval(function() {
-            nodeToColor.colorBox(yellow);
-            if (nodeToColor.previous) {
-                nodeToColor = nodeToColor.previous;
+            if (i >= 0) {
+                finalNodes[i].colorBox(yellow);
+                i--;
             }
             else {
                 clearInterval(mappingColours);
-                btnAll.forEach(x => x.disabled = false);
+                disableUI(false);
             }
         }, 20);
     });

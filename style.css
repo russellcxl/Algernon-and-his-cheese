@@ -9,18 +9,24 @@
     width: 40vw;
 }
 
-.container {
-    margin-right: auto;
-    margin-left: auto;
+.container-board {
+    width: 70vw;
+    height: 70vh;
 }
 
 table {
-    height: 25rem;
-    width: 25rem;
+    width: 100%;
+    height: 100%;
 }
 
-.row {
+td {
+   height: auto;
+   width: 20px;
+   position: relative;
+   border: 2px solid lightgray;
+
 }
+
 
 .buttons {
     display: flex;
@@ -29,8 +35,8 @@ table {
 }
 
 button {
-    margin-top: 20px;
     width: auto;
+    margin-right: 5px;
 }
 
 .legend {
