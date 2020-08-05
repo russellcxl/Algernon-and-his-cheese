@@ -52,12 +52,6 @@ for (let i = 0; i < rows; i++) {
 let boxes = document.querySelectorAll("td");
 
 
-// for (let i = 0; i < boxes.length; i++) {
-//     boxes[i].setAttribute("ondrop", "drop(event)");
-//     boxes[i].setAttribute("ondragover", "allowDrop(event)");
-// }
-
-
 // ------------------------------------ SETTING UP THE NODES ------------------------------------ //
 
 
@@ -129,11 +123,10 @@ function setNodes() {
 
     startNode.colorBox(darkBlue);
     endNode.colorBox(yellow);
-
-    //boxes[0].innerHTML = `<img src="images/mouse.jpg" draggable="true" ondragstart="drag(event)" style="max-width:100%; max-height: 100%;"></img>`;
-
+    
     openSet.push(startNode);
 }
+
 setNodes();
 
 
@@ -143,8 +136,6 @@ setNodes();
 //this is so you can click once on the set-start/set-end buttons to 'toggle' them
 //seems a bit chunky though
 let inputType;
-
-
 
 for (let i = 0; i < boxes.length; i++) {
 
@@ -169,7 +160,7 @@ for (let i = 0; i < boxes.length; i++) {
     //for creating walls
     boxes[i].addEventListener("mousemove", function(e) {
         e.preventDefault(); 
-        if (e.buttons == 1) {
+        if (e.buttons == 1 && !boxes[i].style.background) {
             boxes[i].style.background = "#484848";
             walls.push(grid[Math.floor(i / cols)][i % cols]);
         }
@@ -192,12 +183,19 @@ btnReset.addEventListener("click", function() {
     walls = [];
     closedSet = [];
     openSet = [];
+    finalNodes = [];
     setNodes();
 });
 
 
 // ------------------------------------ DRAG AND DROP ------------------------------------ //
 
+
+// //allow dropping in
+// for (let i = 0; i < boxes.length; i++) {
+//     boxes[i].setAttribute("ondrop", "drop(event)");
+//     boxes[i].setAttribute("ondragover", "allowDrop(event)");
+// }
 
 // function allowDrop(e) {
 //     e.preventDefault();
@@ -210,7 +208,7 @@ btnReset.addEventListener("click", function() {
 // function drop(e) {
 //     e.preventDefault();
 //     let data = e.dataTransfer.getData("text");
-//     e.target.innerHTML = document.getElementById(data).innerHTML;
+//     e.target.appendChild(document.getElementById("flag"));
 // }
 
 
@@ -241,19 +239,24 @@ function findCheese() {
 
         //set current node as node with lowest f cost, color it green, move it to closedset, empty openset
         currentNode = openSet[indexBest];
-        currentNode.colorBox(darkBlue);
+        if (currentNode !== endNode) {
+            currentNode.colorBox(darkBlue);
+        }
         closedSet.push(openSet.splice(indexBest,1)[0]);
 
         //push current node neighbours into the openset, fill g, h, f costs for neighbours
         for (let i = 0; i < currentNode.neighbours.length; i++) {
 
             let neighbour = currentNode.neighbours[i];
-
+            
             //only push neighbours that are not in the closedset
             if (!closedSet.includes(neighbour) && !openSet.includes(neighbour) && !walls.includes(neighbour)) {
                 openSet.push(neighbour);
-                neighbour.colorBox(lightBlue);
 
+                if (neighbour !== endNode) {
+                    neighbour.colorBox(lightBlue);
+                }
+                
                 //before passing on g cost, check if g costs of (closed) neighbours of current neighbours are lower; take the lower
                 for (let j = 0; j < neighbour.neighbours.length; j++) {
 
