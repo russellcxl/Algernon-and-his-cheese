@@ -248,14 +248,20 @@ function findCheese() {
         for (let i = 0; i < currentNode.neighbours.length; i++) {
 
             let neighbour = currentNode.neighbours[i];
-            
+
+            if (neighbour === endNode) {
+                openSet.push(neighbour);
+                neighbour.g = currentNode.g + 1;
+                neighbour.previous = currentNode;
+                neighbour.getH(endNode);
+                neighbour.getF();
+            }
+
             //only push neighbours that are not in the closedset
-            if (!closedSet.includes(neighbour) && !openSet.includes(neighbour) && !walls.includes(neighbour)) {
+            else if (!closedSet.includes(neighbour) && !openSet.includes(neighbour) && !walls.includes(neighbour)) {
                 openSet.push(neighbour);
 
-                if (neighbour !== endNode) {
-                    neighbour.colorBox(lightBlue);
-                }
+                neighbour.colorBox(lightBlue);
                 
                 //before passing on g cost, check if g costs of (closed) neighbours of current neighbours are lower; take the lower
                 for (let j = 0; j < neighbour.neighbours.length; j++) {
@@ -306,7 +312,7 @@ function start() {
             else {
                 findCheese();
             }
-        }, 10);
+        }, 8);
     })
     .then(() => {
         collectFinalNodes();
